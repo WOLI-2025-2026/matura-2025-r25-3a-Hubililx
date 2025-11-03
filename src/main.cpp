@@ -1,4 +1,4 @@
-//imie i nazwisko
+//Hubert Bzówka
 
 #include <iostream>
 int main() {
