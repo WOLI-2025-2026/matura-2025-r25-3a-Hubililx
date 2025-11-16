@@ -2,6 +2,7 @@
 //Zadanie 3
 #include <iostream>
 #include <fstream>
+#include <vector>
 using namespace std;
 
 string z2_1_path_symbole_txt = "../zalaczniki-2025/symbole.txt";
@@ -34,11 +35,61 @@ void Zadanie2_1(){
         
     }
     
-
     wynik.close();
     plik.close();
 }
+
+void Zadanie2_2(){
+    ifstream plik{z2_1_path_symbole_txt};
+    if(!plik.is_open()){
+        cerr << "Nie mozna otworzyc pliku" << endl;
+        return;
+    }
+
+    vector<string> wiersze;
+    string linia;
+    while(getline(plik, linia)){
+        wiersze.push_back(linia);
+    }
+    plik.close();
+
+    ofstream wynik("wynik2_2.txt");
+
+    int liczba_wierszy = wiersze.size();
+    int licznik_kwadratow = 0;
+
+    for(int i = 1; i < liczba_wierszy - 1; i++){
+        int dlugosc = wiersze[i].length();
+        for(int j = 1; j < dlugosc - 1; j++){
+            char znak = wiersze[i][j];
+
+            bool kwadrat = true;
+            for(int di = -1; di <= 1 && kwadrat; di++){
+                for(int dj = -1; dj <= 1; dj++){
+                    if(i+di < 0 || i+di >= liczba_wierszy) { kwadrat = false; break; }
+                    if(j+dj < 0 || j+dj >= wiersze[i+di].length()) { kwadrat = false; break; }
+                    if(wiersze[i+di][j+dj] != znak){ kwadrat = false; break; }
+                }
+            }
+
+            if(kwadrat){
+                licznik_kwadratow++;
+                cout << i+1 << " " << j+1 << endl;
+                wynik << i+1 << " " << j+1 << endl;
+            }
+        }
+    }
+
+    cout << "Liczba kwadratow: " << licznik_kwadratow << endl;
+    wynik << "Liczba kwadratow: " << licznik_kwadratow << endl;
+
+    wynik.close();
+}
+
+
+
 int main() {
     Zadanie2_1();
+    Zadanie2_2();
     return 0;
 }
