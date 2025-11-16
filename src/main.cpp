@@ -17,6 +17,39 @@ bool czy_palindrom(string tekst){
     return true;
 }
 
+int konwertuj(string s){
+    int wynik = 0;
+    for(char c : s){
+        int cyfra;
+        if(c == 'o') cyfra = 0;
+        else if(c == '+') cyfra = 1;
+        else if(c == '*') cyfra = 2;
+
+        wynik = wynik * 3 + cyfra;
+    }
+    return wynik;
+}
+
+string na_trojkowy(int liczba){
+    if(liczba == 0) return "o";
+
+    string wynik = "";
+
+    while(liczba > 0){
+        int reszta = liczba % 3;
+        char znak;
+
+        if(reszta == 0) znak = 'o';
+        else if(reszta == 1) znak = '+';
+        else znak = '*';
+
+        wynik = znak + wynik;
+        liczba /= 3;
+    }
+
+    return wynik;
+}
+
 
 void Zadanie2_1(){
     ifstream plik{z2_1_path_symbole_txt};
@@ -86,10 +119,66 @@ void Zadanie2_2(){
     wynik.close();
 }
 
+void Zadanie2_3() {
+    ifstream plik{z2_1_path_symbole_txt};
+    if(!plik.is_open()){
+        cerr << "Nie mozna otworzyc pliku" << endl;
+        return;
+    }
+
+    ofstream wynik("wynik2_3.txt");
+
+    string linia;
+    int max_wartosc = -1;
+    string max_napis = "";
+
+    while(plik >> linia){
+        int liczba = konwertuj(linia);
+
+        if(liczba > max_wartosc){
+            max_wartosc = liczba;
+            max_napis = linia;
+        }
+    }
+
+    cout << max_wartosc << " " << max_napis << endl;
+    wynik << max_wartosc << " " << max_napis << endl;
+
+    plik.close();
+    wynik.close();
+}
+
+void Zadanie2_4() {
+    ifstream plik{z2_1_path_symbole_txt};
+    if(!plik.is_open()){
+        cerr << "Nie mozna otworzyc pliku" << endl;
+        return;
+    }
+
+    ofstream wynik("wynik2_4.txt");
+
+    long long suma = 0;
+    string linia;
+
+    while(plik >> linia){
+        int liczba = konwertuj(linia);
+        suma += liczba;
+    }
+
+    string trojkowy = na_trojkowy(suma);
+
+    cout << suma << " " << trojkowy << endl;
+    wynik << suma << " " << trojkowy << endl;
+
+    plik.close();
+    wynik.close();
+}
 
 
 int main() {
     Zadanie2_1();
     Zadanie2_2();
+    Zadanie2_3();
+    Zadanie2_4();
     return 0;
 }
